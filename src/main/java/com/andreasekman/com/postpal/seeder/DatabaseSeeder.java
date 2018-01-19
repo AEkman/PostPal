@@ -25,6 +25,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         note.add(new Note("Post 1", "Content 1"));
         note.add(new Note("Post 2", "Content 2"));
         note.add(new Note("Post 3", "Content 3"));
+        note.add(new Note("Post 4", "Curry banan"));
 
         noteRepository.save(note);
     }

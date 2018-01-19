@@ -2,77 +2,98 @@ package com.andreasekman.com.postpal.controller;
 
 import com.andreasekman.com.postpal.model.Note;
 import com.andreasekman.com.postpal.repository.NoteRepository;
+import com.andreasekman.com.postpal.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class NoteController {
 
-    private NoteRepository noteRepository;
-
     @Autowired
-    public NoteController(NoteRepository noteRepository) {
-        this.noteRepository = noteRepository;
-    }
+    private NoteService noteService;
 
     // Get All Notes
-    @GetMapping("/notes")
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
-    }
+    @RequestMapping(
+            value = "/notes",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<Note>> getNotes() {
+        Collection<Note> notes = noteService.findAll();
 
-    // Create a new Note
-    @PostMapping("/notes")
-    public Note createNote(@Valid @RequestBody Note note) {
-        return noteRepository.save(note);
+        return new ResponseEntity<Collection<Note>>(notes, HttpStatus.OK);
     }
 
     // Get a Single Note
-    @GetMapping("/notes/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable(value = "id") Long noteId) {
-        Note note = noteRepository.findOne(noteId);
+    @RequestMapping(
+            value = "/notes/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Note> getNoteById(@PathVariable(value = "id") Long id) {
+        Note note = noteService.findOne(id);
         if(note == null) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<Note>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok().body(note);
     }
 
-    // Get a Note's containing
-    @RequestMapping(value = "/find/{content}", method = RequestMethod.GET)
-    public List<Note> getNoteContaining(@PathVariable String content) {
-        return noteRepository.findByContentContaining(content);
+    // Create a new Note
+    @RequestMapping(
+            value = "/notes",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Note> createNote (@RequestBody Note note) {
+        Note savedNote = noteService.create(note);
+        return new ResponseEntity<Note>(savedNote, HttpStatus.CREATED);
     }
 
     // Update a Note
-    @PutMapping("/notes/{id}")
-    public ResponseEntity<Note> updateNote(@PathVariable(value = "id") Long noteId,
-                                           @Valid @RequestBody Note noteDetails) {
-        Note note = noteRepository.findOne(noteId);
-        if(note == null) {
-            return ResponseEntity.notFound().build();
+    @RequestMapping(
+            value = "/notes/{id}",
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Note> updateNote(@RequestBody Note note) {
+        Note updatedNote = noteService.update(note);
+        if(updatedNote == null) {
+            return new ResponseEntity<Note>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        note.setTitle(noteDetails.getTitle());
-        note.setContent(noteDetails.getContent());
 
-        Note updatedNote = noteRepository.save(note);
-        return ResponseEntity.ok(updatedNote);
+        return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
     }
 
     // Delete a Note
-    @DeleteMapping("/notes/{id}")
-    public ResponseEntity<Note> deleteNote(@PathVariable(value = "id") Long noteId) {
-        Note note = noteRepository.findOne(noteId);
-        if(note == null) {
-            return ResponseEntity.notFound().build();
-        }
+    @RequestMapping(
+            value = "/notes/{id}",
+            method = RequestMethod.DELETE)
+    public ResponseEntity<Note> deleteNote (@PathVariable Long id) {
+        noteService.delete(id);
 
-        noteRepository.delete(note);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<Note>(HttpStatus.NO_CONTENT);
     }
+
+    //TODO implement find by
+    // Get a Note's containing
+//    @RequestMapping(value = "/find/{content}",
+//            method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Note> getNoteContaining(@PathVariable String content) {
+//        Note note = noteService.findByContent(content);
+//        if(note == null) {
+//            return new ResponseEntity<Note>(HttpStatus.NOT_FOUND);
+//        }
+//        return ResponseEntity.ok().body(note);
+//    }
+
+
+
+
 }
 
