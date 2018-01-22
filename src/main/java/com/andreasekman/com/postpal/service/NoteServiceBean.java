@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 import java.util.Collection;
 
 @Service
@@ -40,9 +42,9 @@ public class NoteServiceBean implements NoteService {
     @CachePut(value = "notes", key ="#result.id")
     public Note create(Note note) {
         if(note.getId() != null) {
-            // TODO cannot create note with specified id
-            return null;
+            throw new EntityExistsException("The id attribute must be null");
         }
+
         Note savedNote = noteRepository.save(note);
         return savedNote;
     }
@@ -53,8 +55,7 @@ public class NoteServiceBean implements NoteService {
     public Note update(Note note) {
         Note notePersisted = findOne((note.getId()));
         if (notePersisted == null) {
-            // TODO cannot update greeting that hasnt been persisted
-            return null;
+            throw new NoResultException("Can't update note, entity is not found");
         }
         Note updateNote = noteRepository.save(note);
         return updateNote;
@@ -77,6 +78,5 @@ public class NoteServiceBean implements NoteService {
     @Override
     @CacheEvict(value = "notes", allEntries = true)
     public void evictCache() {
-
     }
 }
