@@ -4,9 +4,9 @@ import com.andreasekman.com.postpal.model.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collection;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long>{
-    List<Note> findByContentContaining(String content);
+    Collection<Note> findByTitleContainingOrContentContaining(String title, String content);
 }

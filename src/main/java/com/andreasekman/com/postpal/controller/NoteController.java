@@ -1,7 +1,6 @@
 package com.andreasekman.com.postpal.controller;
 
 import com.andreasekman.com.postpal.model.Note;
-import com.andreasekman.com.postpal.repository.NoteRepository;
 import com.andreasekman.com.postpal.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,9 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -81,19 +78,16 @@ public class NoteController {
 
     //TODO implement find by
     // Get a Note's containing
-//    @RequestMapping(value = "/find/{content}",
-//            method = RequestMethod.GET,
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Note> getNoteContaining(@PathVariable String content) {
-//        Note note = noteService.findByContent(content);
-//        if(note == null) {
-//            return new ResponseEntity<Note>(HttpStatus.NOT_FOUND);
-//        }
-//        return ResponseEntity.ok().body(note);
-//    }
-
-
-
+    @RequestMapping(value = "/find/{input}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<Note>> getNoteContaining(@PathVariable String input) {
+        Collection<Note> notes = noteService.findByContent(input, input);
+        if(notes == null) {
+            return new ResponseEntity<Collection<Note>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Collection<Note>>(notes, HttpStatus.OK);
+    }
 
 }
 

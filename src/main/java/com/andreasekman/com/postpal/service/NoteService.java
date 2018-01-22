@@ -13,7 +13,9 @@ public interface NoteService {
 
     Note update(Note note);
 
-    Collection<Note> findByContent(String content);
+    Collection<Note> findByContent(String title, String content);
 
     void delete(Long id);
+
+    void evictCache();
 }
