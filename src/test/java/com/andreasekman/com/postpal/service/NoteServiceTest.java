@@ -143,7 +143,6 @@ public class NoteServiceTest {
         Assert.assertTrue("failure - expected EntityExistException", exception != null);
     }
 
-    //TODO fix testDelete, brakes after delete
     @Test
     public void testDelete() {
 
@@ -157,16 +156,20 @@ public class NoteServiceTest {
 
         Collection<Note> list = noteService.findAll();
 
-        Assert.assertEquals("failure - expected size", 4, list.size());
+        Assert.assertEquals("failure - expected size", 3, list.size());
 
         Note deletedEntity = noteService.findOne(id);
 
         Assert.assertNull("failure - expected entity to be deleted", deletedEntity);
     }
 
-    //TODO add test for findbycontent
     @Test
-    public void findByContent() {
-    }
+    public void testFindByContent() {
+        String content = "curry";
 
+        Collection<Note> list = noteService.findByContent(content, content);
+
+        Assert.assertNotNull("Failure - expected not null", list);
+        Assert.assertEquals("Failure - expected size", 1, list.size());
+    }
 }

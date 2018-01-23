@@ -63,9 +63,8 @@ public class NoteServiceBean implements NoteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    @CacheEvict(value = "notes", key = "id")
+    @CacheEvict(value = "notes", key = "#id")
     public void delete(Long id) {
-
         noteRepository.delete(id);
     }
 
