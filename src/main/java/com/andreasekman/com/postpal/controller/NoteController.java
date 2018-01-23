@@ -18,6 +18,7 @@ public class NoteController {
     private NoteService noteService;
 
     // Get All Notes
+    @CrossOrigin
     @RequestMapping(
             value = "/notes",
             method = RequestMethod.GET,

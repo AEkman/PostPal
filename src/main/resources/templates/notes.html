@@ -26,32 +26,30 @@
     </div>
 </nav>
 
-<!-- Main Jumbotron  -->
-<div class="jumbotron">
-    <div class="container">
-        <h1 class="display-3">PostPal</h1>
-        <p>This is a java based rest note application</p>
-        <p><a class="btn btn-primary btn-lg" href="https://github.com/AEkman/PostPal" role="button">Github repo &raquo;</a></p>
-    </div>
-</div>
-
 <div class="container">
-    <!-- Example row of columns -->
+    <!-- Information divs -->
     <div class="row">
-        <div class="col-md-4">
-            <h2>Feature 1</h2>
-            <p>Add info about feature </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-md-6 offset-3 text-center">
+            <div class="alert alert-success" role="alert">
+                This is a success alert—check it out!
+            </div>
         </div>
-        <div class="col-md-4">
-            <h2>Feature 2</h2>
-            <p>Add info about feature </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <h2>Menu</h2>
+            <div class="btn-group-vertical" role="group">
+                <button type="button" class="btn-lg btn-primary w-100" id="addButton">Add note</button>
+                <button type="button" class="btn-lg btn-danger w-100" id="deleteButton">Delete note</button>
+                <button type="button" class="btn-lg btn-info w-100" id="updateButton">Update note</button>
+                <button type="button" class="btn-lg btn-success w-100" id="refreshButton">Refresh</button>
+            </div>
         </div>
-        <div class="col-md-4">
-            <h2>Feature 3</h2>
-            <p>Add info about feature </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-md-10">
+            <h2>Notes</h2>
+            <div id="notes" class="row col-md-12 notes">
+            </div>
         </div>
     </div>
 
@@ -67,5 +65,6 @@
 <script src="../static/js/jquery-3.3.1.min.js"></script>
 <script src="../static/js/bootstrap.min.js"></script>
 <script src="../static/js/site.js"></script>
+<script src="../static/js/notes.js"></script>
 </body>
 </html>
